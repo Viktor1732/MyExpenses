@@ -3,47 +3,28 @@
 <html lang="ru">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="{% static 'expenses/css/main.css' %}" rel="stylesheet">
     <link href="{% static 'expenses/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'expenses/css/dashboard.css' %}" rel="stylesheet">
     <title>MyExpenses {% block title %}{% endblock %}</title>
-</head>
 
+</head>
 <body>
 
-    <div class="container-fluid">
-        <main class="row">
-            <main class="col-md-12">
-                <div class="card">
+    <main role="main">
 
-                </div>
+      {% block content %}
 
-                <div class="col-md-3">
-                </div>
+      {% endblock %}
 
-                <div class="col-md-6">
+    </main>
 
-                </div>
 
-                {% block content %}
-                {% endblock %}
-
-                <div class="col-md-6">
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <script src="/docs/5.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
-            integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"
-            integrity="sha384-gdQErvCNWvHQZj6XZM0dNsAoY4v+j5P1XDpNkcM3HJG1Yx04ecqIHk7+4VBOCHOG"
-            crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="/docs/4.4/static/js/vendor/jquery.slim.min.js"><\/script>')</script><script src="/docs/4.4/dist/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
     <script src="{% static 'expenses/js/dashboard.js' %}"></script>
 </body>
 </html>
