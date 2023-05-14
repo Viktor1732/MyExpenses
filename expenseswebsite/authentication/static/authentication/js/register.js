@@ -4,8 +4,12 @@ const feedBackArea=document.querySelector('.invalid-feedback');
 const emailField=document.querySelector('#emailField');
 const emailFeedBackArea=document.querySelector('.emailFeedBackArea');
 
-const usernameSuccessOutput=document.querySelector('.usernameSuccessOutput')
-const emailSuccessOutput=document.querySelector('.emailSuccessOutput')
+const usernameSuccessOutput=document.querySelector('.usernameSuccessOutput');
+const emailSuccessOutput=document.querySelector('.emailSuccessOutput');
+
+const passwordField=document.querySelector('#passwordField')
+const showPasswordToggle=document.querySelector('.showPasswordToggle');
+
 
 usernameField.addEventListener("keyup", (e) => {
     const usernameVal=e.target.value;
@@ -61,3 +65,16 @@ emailField.addEventListener("keyup", (e) => {
         });
     }
 });
+
+
+const handleToggleInput = (e) => {
+    if  (showPasswordToggle.textContent === 'ПОКАЗАТЬ') {
+        showPasswordToggle.textContent = 'СКРЫТЬ';
+        passwordField.setAttribute('type', 'text')
+    } else {
+        showPasswordToggle.textContent = 'ПОКАЗАТЬ';
+        passwordField.setAttribute('type', 'password');
+    }
+};
+
+showPasswordToggle.addEventListener('click', handleToggleInput);
