@@ -1,5 +1,6 @@
 import json
 
+from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
@@ -39,4 +40,29 @@ class EmailValidationView(View):
 
 class RegistrationView(View):
     def get(self, request):
+        return render(request, 'authentication/register.html')
+
+    def post(self, request):
+
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+
+        # Используется для сохранения уже введенных данных в форму.
+        context = {
+            'fieldValues': request.POST,
+        }
+
+        if not User.objects.filter(username=username).exists():
+            if not User.objects.filter(email=email).exists():
+                if len(password) < 6:
+                    messages.error(request, 'Пароль слишком короткий!')
+                    return render(request, 'authentication/register.html', context=context)
+
+                user = User.objects.create_user(username=username, email=email)
+                user.set_password(password)
+                user.save()
+                messages.success(request, 'Аккаунт успешно создан!')
+                return render(request, 'authentication/register.html')
+
         return render(request, 'authentication/register.html')
