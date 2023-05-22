@@ -1,11 +1,17 @@
 import json
 
 from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.views import View
 from django.contrib.auth.models import User
 from validate_email import validate_email
+from .utils import token_generator
 
 
 class UsernameValidationView(View):
@@ -43,11 +49,9 @@ class RegistrationView(View):
         return render(request, 'authentication/register.html')
 
     def post(self, request):
-
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-
         # Используется для сохранения уже введенных данных в форму.
         context = {
             'fieldValues': request.POST,
@@ -61,8 +65,29 @@ class RegistrationView(View):
 
                 user = User.objects.create_user(username=username, email=email)
                 user.set_password(password)
+                user.is_active = False
                 user.save()
+
+                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))  # Кодируем пользователя для безопасной отправки
+                domain = get_current_site(request).domain
+                link = reverse('activate', kwargs={'uidb64': uidb64, 'token': token_generator.make_token(user)})
+                activate_url = 'http://' + domain + link
+
+                email_subject = 'Активация Вашего аккаунта'
+                email_body = 'Приветствую тебя ' + user.username + '! Для окончания регистрации\
+                 и активации аккаунта пройди по этой ссылке:\n' + activate_url + '\n' + '\n' + 'Если вы считаете,\
+                  что данное сообщение послано вам ошибочно, просто проигнорируйте его'
+                email = EmailMessage(
+                    email_subject,
+                    email_body,
+                    "noreply@semycolon.com",
+                    [email],
+                )
+                email.send(fail_silently=False)
                 messages.success(request, 'Аккаунт успешно создан!')
                 return render(request, 'authentication/register.html')
 
-        return render(request, 'authentication/register.html')
+
+class VerificationView(View):
+    def get(self, request, uidb64, token):
+        return redirect('login')
