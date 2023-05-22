@@ -1,6 +1,7 @@
 import json
 
 from django.contrib import messages
+from django.core.mail import EmailMessage
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
@@ -43,11 +44,9 @@ class RegistrationView(View):
         return render(request, 'authentication/register.html')
 
     def post(self, request):
-
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
-
         # Используется для сохранения уже введенных данных в форму.
         context = {
             'fieldValues': request.POST,
@@ -61,8 +60,16 @@ class RegistrationView(View):
 
                 user = User.objects.create_user(username=username, email=email)
                 user.set_password(password)
+                user.is_active = False
                 user.save()
+                email_subject = 'Активация Вашего аккаунта'
+                email_body = 'ТЕЛО'
+                email = EmailMessage(
+                    email_subject,
+                    email_body,
+                    "noreply@semycolon.com",
+                    [email],
+                )
+                email.send(fail_silently=False)
                 messages.success(request, 'Аккаунт успешно создан!')
                 return render(request, 'authentication/register.html')
-
-        return render(request, 'authentication/register.html')
