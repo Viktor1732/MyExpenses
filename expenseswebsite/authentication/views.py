@@ -137,3 +137,10 @@ class LoginView(View):
 
         messages.error(request, 'Пожалуйста заполните все поля.')
         return render(request, 'authentication/login.html')
+
+
+class LogoutView(View):
+    def post(self, request):
+        auth.logout(request)
+        messages.success(request, 'Вы вышли из аккаунта')
+        return redirect('login')
